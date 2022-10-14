@@ -1,0 +1,47 @@
+html,
+body,
+#root {
+    height : 100%;
+}
+
+body {
+    margin                  : 0;
+    font-family             : source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    -webkit-font-smoothing  : antialiased;
+    -moz-osx-font-smoothing : grayscale;
+}
+
+h1, h2, h3, h4 {
+    font-weight : 600;
+    font-family : 'Barlow', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+h2 {
+    font-weight   : 600;
+    font-size     : 32px;
+    line-height   : 32px;
+    margin-bottom : 2rem;
+}
+
+h4 {
+    font-weight   : 400;
+    font-size     : 26px;
+    line-height   : 30px;
+    margin-bottom : 2rem;
+}
+
+.rs-btn-primary,
+.rs-btn-primary:disabled, .rs-btn-primary.rs-btn-disabled,
+.rs-btn-primary:hover, .rs-btn-primary:focus,
+.rs-picker-select-menu-item.rs-picker-select-menu-item-active,
+.rs-calendar-month-dropdown-cell-active .rs-calendar-month-dropdown-cell-content,
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+    background-color : rgba(255, 255, 255, .25);
+}
+.rs-btn-primary:hover {
+    background-color : rgba(255, 255, 255, .5);
+}
+
+.rs-calendar-table-cell-in-range::before {
+    background-color: rgba(255, 255, 255, .1);
+}
