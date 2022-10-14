@@ -84,7 +84,7 @@ export const TreeItem = observer( ( props : TreeItemProps ) => {
                     content = <>
                         <Zeile style={ { paddingLeft : level + 'rem' } }>
                             <Title>{ item.name }</Title>
-                            { !hasChildren && <SkillLevel item={ item }/> }
+                            { !hasChildren && <SkillLevel id={ item.id }/> }
                         </Zeile>
                         { children }
                     </>;

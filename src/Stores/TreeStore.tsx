@@ -1,5 +1,8 @@
-import { makeAutoObservable } from 'mobx';
-import { stopPersisting }     from 'mobx-persist-store';
+import { observable }            from 'mobx';
+import { get, set, has, remove } from 'mobx';
+import { makeAutoObservable }    from 'mobx';
+import { makePersistable }       from 'mobx-persist-store';
+import { stopPersisting }        from 'mobx-persist-store';
 
 import React             from 'react';
 import { FC }            from 'react';
@@ -17,22 +20,21 @@ export class TreeStore {
     
     _tree : TreeItem[] = tree as unknown as TreeItem[];
     
-    _selectedItems : SelectedItems = {
-        '136104' : SkillLevel.GRUNDKENTNISSE
-    };
+    _selectedItems : SelectedItems = observable.object( {} );
     
     _renderMode : RenderMode = RenderMode.TREE;
     
     constructor() {
         makeAutoObservable( this );
         
-        //makePersistable( this, {
-        //    name       : 'decidumb',
-        //    storage    : window.localStorage,
-        //    properties : [
-        //        '_renderMode'
-        //    ]
-        //} );
+        makePersistable( this, {
+            name       : 'decidumb',
+            storage    : window.localStorage,
+            properties : [
+                '_renderMode',
+                '_selectedItems'
+            ]
+        } );
     }
     
     stopStore() {
@@ -52,24 +54,20 @@ export class TreeStore {
     }
     
     toggleSkill( id : TreeItemId, level : SkillLevel ) {
-        if ( this._selectedItems.hasOwnProperty( id ) ) {
+        if ( has( this._selectedItems, id ) ) {
             if ( this._selectedItems[ id ] === level ) {
-                delete this._selectedItems[ id ];
+                remove( this._selectedItems, id );
             } else {
-                this._selectedItems = {
-                    ...this._selectedItems,
-                    [ id ] : level
-                }
+                set( this._selectedItems, id, level );
             }
         } else {
-            this._selectedItems = {
-                ...this._selectedItems,
-                [ id ] : level
-            }
+            set( this._selectedItems, id, level );
         }
-        const currentLevel = this._selectedItems[ id ]
     }
     
+    getSkillLevel( id : TreeItemId ) : SkillLevel | null {
+        return get( this._selectedItems, id );
+    }
 }
 
 export const TreeStoreContext = createContext<TreeStore>( new TreeStore() );
