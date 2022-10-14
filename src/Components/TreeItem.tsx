@@ -1,12 +1,11 @@
-import React           from 'react';
-import styled          from '@emotion/styled';
-import { observer }    from 'mobx-react';
-import { InputNumber } from 'rsuite';
+import React        from 'react';
+import styled       from '@emotion/styled';
+import { observer } from 'mobx-react';
 
 import { TreeItem as Item } from 'Models/TreeItem';
-import { useTreeStore }     from 'Stores/TreeStore';
 import { RenderMode }       from 'Models/RenderMode';
-import { SkillLevel }       from './SkillLevel';
+import { useTreeStore }     from 'Stores/TreeStore';
+import { SkillLevel }       from 'Components/SkillLevel';
 
 const Zeile = styled.div`
   display         : flex;
@@ -17,8 +16,12 @@ const Zeile = styled.div`
 const Container = styled.div`
   padding : 2px 0;
 
+  &[data-has-children=false]:hover {
+    background-color : rgba(255, 255, 255, .075);
+  }
+
   &:focus {
-    background-color : rgba(255, 255, 255, .1);
+    background-color : rgba(255, 255, 255, .15) !important;
     outline          : 0 none;
   }
 `;
@@ -27,18 +30,6 @@ const Title = styled.div`
   width       : auto;
   flex-shrink : 1;
   flex-grow   : 1;
-`;
-
-const YesNo = styled.div`
-  width       : 90px;
-  flex-shrink : 0;
-  flex-grow   : 0;
-`;
-
-const Numbers = styled.div`
-  width       : 160px;
-  flex-shrink : 0;
-  flex-grow   : 0;
 `;
 
 interface TreeItemProps {
@@ -59,9 +50,10 @@ export const TreeItem = observer( ( props : TreeItemProps ) => {
         { items.map( item => {
             
             const hasChildren = item.children.length > 0
+            const id          = item.id;
             const tabindex    = hasChildren ? -1 : 0;
             const nameList    = [ ...parentNames, item.name ];
-            const key         = [ 'lvl', level, 'id', item.id ].join( '-' );
+            const key         = [ 'lvl', level, 'id', id ].join( '-' );
             
             let children = <></>;
             if ( hasChildren ) {
@@ -84,7 +76,7 @@ export const TreeItem = observer( ( props : TreeItemProps ) => {
                     content = <>
                         <Zeile style={ { paddingLeft : level + 'rem' } }>
                             <Title>{ item.name }</Title>
-                            { !hasChildren && <SkillLevel id={ item.id }/> }
+                            { !hasChildren && <SkillLevel id={ id }/> }
                         </Zeile>
                         { children }
                     </>;
@@ -94,7 +86,11 @@ export const TreeItem = observer( ( props : TreeItemProps ) => {
                     break;
             }
             
-            return <Container tabIndex={ tabindex } key={ key }>
+            return <Container
+                data-tree-item-id={ id }
+                data-has-children={ hasChildren }
+                tabIndex={ tabindex }
+                key={ key }>
                 { content }
             </Container>;
         } ) }

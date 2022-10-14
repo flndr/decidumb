@@ -1,6 +1,6 @@
-import React          from 'react';
-import styled         from '@emotion/styled';
-import { observer }   from 'mobx-react';
+import React        from 'react';
+import styled       from '@emotion/styled';
+import { observer } from 'mobx-react';
 
 import { useTreeStore }        from 'Stores/TreeStore';
 import { SkillLevel as Level } from 'Models/SkillLevel';
@@ -44,23 +44,18 @@ export const SkillLevel = observer( ( props : SkillLevelProps ) => {
     
     return <>
         <Numbers>
-            <Value onClick={ () => toggle( Level.GRUNDKENTNISSE ) }
-                   isActive={ level === Level.GRUNDKENTNISSE }>0</Value>
-            <Seperator>|</Seperator>
-            <Value onClick={ () => toggle( Level.WENIG_ERFAHRUNG ) }
-                   isActive={ level === Level.WENIG_ERFAHRUNG }>1</Value>
-            <Seperator>|</Seperator>
-            <Value onClick={ () => toggle( Level.VERTIEFTE_KENNTNISSE ) }
-                   isActive={ level === Level.VERTIEFTE_KENNTNISSE }>2</Value>
-            <Seperator>|</Seperator>
-            <Value onClick={ () => toggle( Level.SPEZIALWISSEN ) }
-                   isActive={ level === Level.SPEZIALWISSEN }>3</Value>
-            <Seperator>|</Seperator>
-            <Value onClick={ () => toggle( Level.EXPERTE ) }
-                   isActive={ level === Level.EXPERTE }>4</Value>
+            { [ 0, 1, 2, 3, 4 ].map( lvl => (
+                <span key={ [ 'skill', props.id, lvl ].join( '-' ) }>
+                    <Value onClick={ () => toggle( lvl as Level ) }
+                           isActive={ level === lvl }>
+                        { lvl }
+                    </Value>
+                    { lvl < 4 && <Seperator>|</Seperator> }
+                </span>
+            ) ) }
         </Numbers>
         <YesNo>
-            <Value isActive={ !!level }>ja</Value>
+            <Value isActive={ level === 'ja' }>ja</Value>
             <Seperator>|</Seperator>
             <Value isActive={ false }>nein</Value>
         </YesNo>

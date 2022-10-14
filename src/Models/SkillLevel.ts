@@ -1,7 +1,1 @@
-export enum SkillLevel {
-    WENIG_ERFAHRUNG      = 0,
-    GRUNDKENTNISSE       = 1,
-    VERTIEFTE_KENNTNISSE = 2,
-    SPEZIALWISSEN        = 3,
-    EXPERTE              = 4,
-}
+export type SkillLevel = 0 | 1 | 2 | 3 | 4 | "ja";
