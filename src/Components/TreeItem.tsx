@@ -2,6 +2,8 @@ import React        from 'react';
 import styled       from '@emotion/styled';
 import { observer } from 'mobx-react';
 
+import { Element as ScrollElement } from 'react-scroll';
+
 import { TreeItem as Item } from 'Models/TreeItem';
 import { RenderMode }       from 'Models/RenderMode';
 import { useTreeStore }     from 'Stores/TreeStore';
@@ -86,13 +88,18 @@ export const TreeItem = observer( ( props : TreeItemProps ) => {
                     break;
             }
             
-            return <Container
-                data-tree-item-id={ id }
-                data-has-children={ hasChildren }
-                tabIndex={ tabindex }
-                key={ key }>
+            content = <ScrollElement name={ id }>
                 { content }
-            </Container>;
+            </ScrollElement>;
+            
+            return hasChildren
+                   ? <Container data-tree-item-id={ id } data-has-children={ hasChildren } key={ key }>
+                       { content }
+                   </Container>
+                   : <Container data-tree-item-id={ id } data-has-children={ hasChildren } key={ key }
+                                tabIndex={ tabindex }>
+                       { content }
+                   </Container>;
         } ) }
     </div>
 } );
