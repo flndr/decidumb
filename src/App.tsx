@@ -1,3 +1,4 @@
+import styled        from '@emotion/styled';
 import React         from 'react';
 import { Key }       from 'ts-key-enum';
 import { observer }  from 'mobx-react';
@@ -7,6 +8,24 @@ import { scroller }  from 'react-scroll';
 import { useTreeStore }      from 'Stores/TreeStore';
 import { TreeStoreProvider } from 'Stores/TreeStore';
 import { TreeItem }          from 'Components/TreeItem';
+import { Header }            from 'Components/Header';
+
+const Overlay = styled.div`
+  position         : fixed;
+  margin           : 10% auto;
+  width            : 80%;
+  height           : 80%;
+  left             : 0;
+  right            : 0;
+  background-color : white;
+  display          : flex;
+  justify-content  : center;
+  align-items      : center;
+`;
+
+const Export = styled.code`
+  word-wrap: break-word;
+`
 
 function App() {
     
@@ -54,14 +73,14 @@ function App() {
                     return;
                 }
                 allItems[ current - 1 ].focus();
-                scrollTo( allItems[ current - 1 ]!.getAttribute( 'data-tree-item-id' )! );
+                //scrollTo( allItems[ current - 1 ]!.getAttribute( 'data-tree-item-id' )! );
                 break;
             case Key.ArrowDown:
                 if ( current === allItems.length - 1 ) {
                     return;
                 }
                 allItems[ current + 1 ].focus();
-                scrollTo( allItems[ current + 1 ]!.getAttribute( 'data-tree-item-id' )! );
+                //scrollTo( allItems[ current + 1 ]!.getAttribute( 'data-tree-item-id' )! );
                 break;
         }
     };
@@ -76,6 +95,12 @@ function App() {
     
     return <>
         <TreeStoreProvider store={ treeStore }>
+            <Overlay>
+                <textarea>
+                    { treeStore.exportSelected() }
+                </textarea>
+            </Overlay>
+            <Header/>
             <TreeItem items={ treeStore.tree }/>
         </TreeStoreProvider>
     </>;

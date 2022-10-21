@@ -1,6 +1,7 @@
-import React        from 'react';
-import styled       from '@emotion/styled';
-import { observer } from 'mobx-react';
+import React                       from 'react';
+import styled                      from '@emotion/styled';
+import { observer }                from 'mobx-react';
+import { StickyContainer, Sticky } from 'react-sticky';
 
 import { Element as ScrollElement } from 'react-scroll';
 
@@ -29,9 +30,12 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  width       : auto;
-  flex-shrink : 1;
-  flex-grow   : 1;
+  width         : auto;
+  flex-shrink   : 1;
+  flex-grow     : 1;
+  padding       : 0 8px;
+  border-radius : 2px;
+  //box-shadow    : 0px 6px 5px 0px rgba(15, 19, 26, 0.78);
 `;
 
 interface TreeItemProps {
@@ -75,13 +79,38 @@ export const TreeItem = observer( ( props : TreeItemProps ) => {
                     </>;
                     break;
                 case RenderMode.TREE:
-                    content = <>
-                        <Zeile style={ { paddingLeft : level + 'rem' } }>
-                            <Title>{ item.name }</Title>
-                            { !hasChildren && <SkillLevel id={ id }/> }
-                        </Zeile>
-                        { children }
-                    </>;
+                    if ( hasChildren ) {
+                        content = <StickyContainer>
+                            <Zeile style={ { paddingLeft : level + 'rem' } }>
+                                <Sticky disableHardwareAcceleration={ false }
+                                        topOffset={ ( parentNames.length + 0 ) * -20 }>
+                                    { ( { style, isSticky, } ) => (
+                                        <Title style={ {
+                                            ...style,
+                                            //backgroundColor : 'rgba(0,51,140)',
+                                            backgroundColor : '#0F131A',
+                                            color           : 'white',
+                                            width           : '100%',
+                                            //boxShadow       : '0px 6px 24px 6px #0F131A',
+                                            zIndex : isSticky ? 20 - parentNames.length : 0,
+                                            //zIndex          : 10,
+                                            marginTop : isSticky
+                                                        ? ( parentNames.length * 20 ) + 'px'
+                                                        : 0
+                                        } }>{ item.name }</Title>
+                                    ) }
+                                </Sticky>
+                            </Zeile>
+                            { children }
+                        </StickyContainer>;
+                    } else {
+                        content = <>
+                            <Zeile style={ { paddingLeft : level + 'rem' } }>
+                                <Title>{ item.name }</Title>
+                                <SkillLevel id={ id }/>
+                            </Zeile>
+                        </>;
+                    }
                     break;
                 default:
                     content = <></>

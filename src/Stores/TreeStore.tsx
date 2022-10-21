@@ -96,6 +96,10 @@ export class TreeStore {
     has( id : TreeItemId ) : boolean {
         return has( this._selectedItems, id )
     }
+    
+    exportSelected() : string {
+        return JSON.stringify( this._selectedItems )
+    }
 }
 
 export const TreeStoreContext = createContext<TreeStore>( new TreeStore() );
