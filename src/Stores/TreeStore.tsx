@@ -23,15 +23,15 @@ export class TreeStore {
     _selectedItems : SelectedItems = observable.object( {} );
     
     _renderMode : RenderMode = RenderMode.TREE;
+    _isExportImportOpen      = false;
     
     constructor() {
         makeAutoObservable( this );
         
         makePersistable( this, {
-            name       : 'decidumb',
+            name       : 'skills',
             storage    : window.localStorage,
             properties : [
-                '_renderMode',
                 '_selectedItems'
             ]
         } );
@@ -47,6 +47,10 @@ export class TreeStore {
     
     get renderMode() {
         return this._renderMode;
+    }
+    
+    get isExportImportOpen() {
+        return this._isExportImportOpen;
     }
     
     toggleSkill( id : TreeItemId, level : SkillLevel ) {
@@ -99,6 +103,32 @@ export class TreeStore {
     
     exportSelected() : string {
         return JSON.stringify( this._selectedItems )
+    }
+    
+    openExportImport() {
+        return this._isExportImportOpen = true;
+    }
+    
+    closeExportImport() {
+        return this._isExportImportOpen = false;
+    }
+    
+    toggleExportImport() {
+        return this._isExportImportOpen = !this._isExportImportOpen;
+    }
+    
+    importCode( json : string ) {
+        const selectedItemsBackup = JSON.parse( JSON.stringify( this._selectedItems ) ) as SelectedItems;
+        try {
+            this._selectedItems = JSON.parse( json );
+        } catch ( e ) {
+            this._selectedItems = selectedItemsBackup;
+            throw e;
+        }
+    }
+    
+    reset() {
+        this._selectedItems = {};
     }
 }
 

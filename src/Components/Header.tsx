@@ -1,39 +1,35 @@
-import React        from 'react';
-import styled       from '@emotion/styled';
-import { observer } from 'mobx-react';
+import React          from 'react';
+import styled         from '@emotion/styled';
+import { observer }   from 'mobx-react';
+import ArrowLeftIcon  from '@rsuite/icons/ArrowLeft';
+import ArrowRightIcon from '@rsuite/icons/ArrowRight';
+import ArrowDownIcon from '@rsuite/icons/ArrowDown';
+import ArrowUpIcon from '@rsuite/icons/ArrowUp';
 
 import { Button }       from 'rsuite';
 import { useTreeStore } from 'Stores/TreeStore';
 
 const Container = styled.div`
-  text-align : right;
-  //display         : flex;
-  //justify-content : stretch;
-  //align-items     : center;
+  display         : flex;
+  justify-content : space-between;
+  align-items     : center;
+  padding         : 8px;
+  width           : 100%;
 `;
-
-const Link = styled.a<{ on : boolean }>`
-  color           : ${ p => p.on ? '#F8F8F8' : ' #868686' };
-  cursor          : ${ p => p.on ? 'default' : ' pointer' };
-  text-decoration : none;
-
-  &:hover {
-    text-decoration : none;
-  }
-`;
-
-const Sep = styled.span`
-  color   : #868686;
-  padding : 0 0.25rem;
-`;
-
 export const Header = observer( () => {
     
     const treeStore = useTreeStore();
     
+    const ico = { style : { fontSize : "20px" } };
+    
     return <Container>
-        <h1>Decidumb</h1>
-        {/*<div>Zeige <Link on={ true }>alle</Link><Sep>|</Sep><Link on={ false }>ausgewählte</Link></div>*/}
-        {/*<div>Autoscroll <Link on={ false }>an</Link><Sep>|</Sep><Link on={ true }>aus</Link></div>*/}
+        <h1>Skills</h1>
+        <div>
+            <div>Tastatur</div>
+            <div><ArrowLeftIcon { ...ico }/>/<ArrowRightIcon { ...ico }/> Wert einstellen</div>
+            <div><ArrowDownIcon { ...ico }/>/<ArrowUpIcon { ...ico }/> Zeile ändern</div>
+        </div>
+        <Button onClick={ () => treeStore.toggleExportImport() }>Import/Export</Button>
+        <Button onClick={ () => treeStore.reset() }>Reset (DANGER)</Button>
     </Container>
 } );
